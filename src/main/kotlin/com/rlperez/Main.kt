@@ -4,8 +4,7 @@ import java.io.File
 import java.net.URI
 
 open class Main {
-
-    // Assume none of the strings contain commas, newlines, malicious constructs or any edge cases
+// Assume none of the strings contain commas, newlines, malicious constructs or any edge cases
 //
 // The attached text file contains the favorite musical artists of 1000 users from Some Popular Music Review Website. Each line is a list of up to 50 artists, formatted as follows:
 //
