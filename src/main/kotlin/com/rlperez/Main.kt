@@ -3,7 +3,7 @@ package com.rlperez
 import java.io.File
 
 open class Main {
-// Assume none of the strings contain commas, newlines, malicious constructs or any edge cases
+    // Assume none of the strings contain commas, newlines, malicious constructs or any edge cases
 //
 // The attached text file contains the favorite musical artists of 1000 users from Some Popular Music Review Website. Each line is a list of up to 50 artists, formatted as follows:
 //
@@ -20,13 +20,45 @@ open class Main {
 // explain why this tradeoff improves the performance of the algorithm. Please include, either in comments or in a separate
 // file, a brief one-paragraph description of any optimizations you made and how they impact the run-time of the algorithm.
     companion object {
+
         @JvmStatic
         fun main(args: Array<String>) {
-            println(args.joinToString(" : "))
-            val inputStream = Main::class.java.classLoader.getResourceAsStream("Artist_lists_small.txt")
-            val outputStream = File("./output.txt").outputStream()
-            val analyzer = ArtistAnalyzer(inputStream, outputStream)
-            analyzer.analyze()
+            if (args.getOrElse(0) { "" } == "-h") {
+                printUsage()
+            } else {
+                val inputStream =
+                    if (args.isEmpty())
+                        Main::class.java.classLoader.getResourceAsStream(args.getOrElse(0) { "Artist_lists_small.txt" })
+                    else
+                        File(args.first()).inputStream()
+                val outputStream = File(args.getOrElse(1) { "./output.txt" }).outputStream()
+                val analyzer = ArtistAnalyzer(inputStream, outputStream)
+                analyzer.analyze()
+            }
+        }
+
+        private fun printUsage() {
+            println()
+            println("java -jar arena-1.0-SNAPSHOT-jar-with-dependencies.jar")
+            println()
+            println(
+                "When run with no arguments the input file will be Artist_lists_small.txt which is packaged in the jar " +
+                        "and the output will be output.txt at the current directory."
+            )
+            println("========================================================================")
+            println("java -jar arena-1.0-SNAPSHOT-jar-with-dependencies.jar <Input File Path>")
+            println()
+            println(
+                "When run with one argument the input file will be the argument provided and the output will be output.txt " +
+                        "at the current directory."
+            )
+            println("========================================================================")
+            println("java -jar arena-1.0-SNAPSHOT-jar-with-dependencies.jar <Input File Path>")
+            println()
+            println(
+                "When run with two arguments the input file will be the first argument provided and the " +
+                        "output will be the second argument provided."
+            )
         }
     }
 }
