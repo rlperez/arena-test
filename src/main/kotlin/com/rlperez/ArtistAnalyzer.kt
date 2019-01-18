@@ -1,20 +1,19 @@
 package com.rlperez
 
-import java.io.File
-import java.net.URI
+import java.io.*
 
-class ArtistAnalyzer(private val fileInputPath: URI, private val fileOutputPath: URI) {
+class ArtistAnalyzer(private val fileInputStream: InputStream, private val fileOutputStream: OutputStream) {
     private val counts: MutableMap<String, Int> = mutableMapOf()
 
     fun analyze() {
-        readInput(fileInputPath)
+        readInput(fileInputStream.bufferedReader())
         val result: Set<String> = filterOccurrences(counts, 50)
-        writeOutput(result, fileOutputPath)
+        writeOutput(result, fileOutputStream.bufferedWriter())
     }
 
-    fun readInput(fileInputPath: URI) {
+    fun readInput(fileInputReader: BufferedReader) {
         counts.clear()
-        File(fileInputPath).bufferedReader().useLines { lines ->
+        fileInputReader.useLines { lines ->
             lines.forEach { line ->
                 val combinations: Set<String> = combinations(line.split(","))
                 combinations.forEach { counts[it] = counts.getOrDefault(it, 0) + 1 }
@@ -22,8 +21,8 @@ class ArtistAnalyzer(private val fileInputPath: URI, private val fileOutputPath:
         }
     }
 
-    fun writeOutput(values: Set<String>, fileOutputPath: URI): Unit {
-        File(fileOutputPath).bufferedWriter().use { bw ->
+    fun writeOutput(values: Set<String>, fileOutputWriter: BufferedWriter) {
+        fileOutputWriter.use { bw ->
             values.forEach { bw.appendln(it) }
         }
     }

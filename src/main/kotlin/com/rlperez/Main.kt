@@ -1,7 +1,6 @@
 package com.rlperez
 
 import java.io.File
-import java.net.URI
 
 open class Main {
 // Assume none of the strings contain commas, newlines, malicious constructs or any edge cases
@@ -24,9 +23,9 @@ open class Main {
         @JvmStatic
         fun main(args: Array<String>) {
             println(args.joinToString(" : "))
-            val inputPath = URI(Main::class.java.classLoader.getResource("Artist_lists_small.txt").toString())
-            val outputPath = URI(File("./output.txt").toURI().toString())
-            val analyzer = ArtistAnalyzer(inputPath, outputPath)
+            val inputStream = Main::class.java.classLoader.getResourceAsStream("Artist_lists_small.txt")
+            val outputStream = File("./output.txt").outputStream()
+            val analyzer = ArtistAnalyzer(inputStream, outputStream)
             analyzer.analyze()
         }
     }
